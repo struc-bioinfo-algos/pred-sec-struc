@@ -3,5 +3,6 @@
 
 class DelMe:
 
+    @staticmethod
     def somedef():
         return 42

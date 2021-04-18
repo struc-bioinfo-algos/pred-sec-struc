@@ -10,3 +10,7 @@ class TestDelMe(unittest.TestCase):
         expected = 42
         observed = DelMe.somedef()
         self.assertEqual(expected, observed)
+
+
+if __name__ == "__main__":
+    unittest
