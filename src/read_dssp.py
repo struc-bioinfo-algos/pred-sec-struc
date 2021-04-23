@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import sys
 import logging
 from enum import Enum
 from src.settings import Settings
@@ -31,17 +32,21 @@ class ReadDSSP():
     @classmethod
     def read(cls, pdb_id: str) -> list:
         """Read DSSP file of PDB ID"""
-        aa_lst = []
+        aa_lst = []  # ToDo: make this a class (-> issue 12)
         filename = cls.get_filename(pdb_id=pdb_id)
         logger.info(f'filename: {filename}')
         read_line = False
-        with open(filename, 'r') as fp:
-            for line in fp:
-                if line.startswith(cls.header_line):
-                    read_line = True
-                    continue
-                if read_line:
-                    aa_lst.append(line)
+        try:
+            with open(filename, 'r') as fp:
+                for line in fp:
+                    if line.startswith(cls.header_line):
+                        read_line = True
+                        continue
+                    if read_line:
+                        aa_lst.append(line)
+        except FileNotFoundError as err:
+            logger.error(f'Error {err.errno}: File {filename} not found - please check path in settings.ini')
+            sys.exit()
 
         return aa_lst
 

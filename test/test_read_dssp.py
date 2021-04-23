@@ -9,7 +9,7 @@ from src.read_dssp import ReadDSSP
 class TestReadDSSP(unittest.TestCase):
 
     def setUp(self) -> None:
-        #self.dssp_path = './test/test.dssp'
+        #self.dssp_path = './test/1tes.dssp'
         self.dssp_line2 = '    1  307 A A    >         0   0   56      0, 0.0     3,-0.7     0, 0.0    58,-0.0   0.000 360.0 360.0 360.0 -50.8   15.6  -14.4  -34.4                A         A          1        307          0          0          0          3          0         58\n'
 
     def test_extract_info_from_line_no_structure(self):
