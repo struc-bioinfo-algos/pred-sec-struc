@@ -3,6 +3,9 @@
 ## Prediction of Protein Secondary Structure using Machine Learning
 Final Project - Algorithms for Structural Bioinformatics (605.751)
 
+## Architecture
+![architecture](./architecture.svg)
+
 ## Development Environment
 Create a [virtual environment](https://docs.python.org/3/tutorial/venv.html) and activate it.
 Then install or update the dependencies by running:
