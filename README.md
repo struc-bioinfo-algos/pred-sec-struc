@@ -12,6 +12,7 @@ Then install or update the dependencies by running:
 ```bash
 pip install -r requirements.txt
 ```
+Next, in `settings.ini` set the path to directory `dssp` on your local system.
 
 ## Run `pred-sec-struc`
 
