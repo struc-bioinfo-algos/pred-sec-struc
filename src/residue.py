@@ -15,3 +15,12 @@ class Residue:
         residue_and_structure = self.read_seq.read()
         #dssp_path = os.listdir(Settings.dssp_path)
         pass
+
+
+class ResidueFactory:
+    def __init__(self):
+        self.class_name = 'Residue'
+        self.residue_lst: list = []
+
+    def construct(self, instance_names: list) -> dict:
+        return {instance_name: Residue(pdb_id=instance_name) for instance_name in instance_names}
