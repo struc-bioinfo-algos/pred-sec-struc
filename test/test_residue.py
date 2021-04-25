@@ -9,15 +9,23 @@ class TestResidue(unittest.TestCase):
     def setUp(self) -> None:
         self.dssp_test_filename = '1tes'
         self.dssp_path = './test'
-
-    def test_set_residue_and_structure(self):
         with patch('src.settings.Settings.dssp_path', new_callable=PropertyMock) as prop:
             prop.return_value = self.dssp_path
-            residue = Residue(pdb_id=self.dssp_test_filename)
-            residue.set_residue_and_structure()
-            self.assertEqual(len(residue.residue_and_structure), 509)
-            self.assertEqual(residue.residue_and_structure[384].amino_acid, 'K')
-            self.assertEqual(residue.residue_and_structure[176].category, 'c')
+            self.residue = Residue(pdb_id=self.dssp_test_filename)
+            self.residue.set_residue_and_structure()
+        Target.get_table()
+
+    def test_set_residue_and_structure(self):
+            self.assertEqual(len(self.residue.residue_and_structure), 577)
+            self.assertEqual(self.residue.residue_and_structure[384].amino_acid, 'V')
+            self.assertEqual(self.residue.residue_and_structure[176].category, 'c')
+
+    def test_get_category_frequencies(self):
+        self.residue.get_category_frequencies()
+        self.assertTrue(self.residue.category_frequencies['a'] > 0.5)
+        self.assertTrue(self.residue.category_frequencies['b'] == 0)
+        self.assertTrue(self.residue.category_frequencies['c'] < 0.5)
+
 
 
 class TestResidueFactory(unittest.TestCase):
@@ -27,9 +35,9 @@ class TestResidueFactory(unittest.TestCase):
 
     def test_construct(self):
         self.instance_dct = self.factory.construct()
-        for key, val in self.instance_dct.items():
+        for residue_instance in self.instance_dct.values():
             #print(f'Instance name: {key}, Instance: {val}')
-            self.assertIsInstance(val, Residue)
+            self.assertIsInstance(residue_instance, Residue)
 
     def tearDown(self) -> None:
         del self.factory
@@ -45,12 +53,12 @@ class TestResidueFactory(unittest.TestCase):
 class TestAminoAcid(unittest.TestCase):
     def test_get_table(self):
         expected = {
-            'A': 0, 'C': 1, 'D': 2, 'E': 3, 'F': 4, 'G': 5, 'H': 6, 'I': 7, 'K': 8, 'L': 9, 'M': 10,
-            'N': 11, 'P': 12, 'Q': 13, 'R': 14, 'S': 15, 'T': 16, 'V': 17, 'W': 18, 'Y': 19
+            '-': 0, 'A': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5, 'G': 6, 'H': 7, 'I': 8, 'K': 9, 'L': 10, 'M': 11, 'N': 12,
+            'P': 13, 'Q': 14, 'R': 15, 'S': 16, 'T': 17, 'V': 18, 'W': 19, 'Y': 20
         }
         AminoAcid.get_table()
         self.assertEqual(expected, AminoAcid.mapping)
-        self.assertEqual(AminoAcid.mapping['S'], 15)
+        self.assertEqual(AminoAcid.mapping['S'], 16)
 
 
 class TestTarget(unittest.TestCase):

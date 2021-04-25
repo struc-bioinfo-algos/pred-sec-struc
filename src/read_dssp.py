@@ -23,14 +23,14 @@ class ReadDSSP:
     @classmethod
     def extract_info_from_line(cls, line: str) -> tuple:
         """Returns amino acid and corresponding structure from line in DSSP file."""
-        aa = line[cls.aa_pos_start:cls.aa_pos_end]
-        structure = line[cls.struc_pos_start:cls.struc_pos_end]
+        aa = line[cls.aa_pos_start:cls.aa_pos_end].strip()
+        structure = line[cls.struc_pos_start:cls.struc_pos_end].strip()
 
-        if aa.isspace():
+        if aa == '':
             tag = StructureTag.NO_AA
-        elif structure.isspace():
+        elif structure == '':
             tag = StructureTag.NO_STRUCTURE
-        elif aa.isspace() and structure.isspace():
+        elif aa == '' and structure == '':
             tag = StructureTag.NONE
         else:
             tag = StructureTag.OKAY
@@ -39,7 +39,7 @@ class ReadDSSP:
 
     @classmethod
     def read(cls, pdb_id: str) -> list[namedtuple]:
-        """Read DSSP file of PDB ID"""
+        """Read DSSP file of PDB ID and return a list of (AA, structure label) tuples."""
         residue_and_category_lst = []  # ToDo: make this a class (-> issue 12)
         filename = cls.get_filename(pdb_id=pdb_id)
         logger.info(f'filename: {filename}')
@@ -52,7 +52,7 @@ class ReadDSSP:
                         continue
                     if read_line:
                         aa, structure, tag = cls.extract_info_from_line(line=line)
-                        if tag.name == 'OKAY':
+                        if tag.name == 'OKAY' or tag.name == 'NO_STRUCTURE':
                             cat = cls.dssp_structure_to_category(structure_label=structure)
                             res_and_struc = cls.ResidueAndCategory(amino_acid=aa.strip(), category=cat)
                             residue_and_category_lst.append(res_and_struc)
