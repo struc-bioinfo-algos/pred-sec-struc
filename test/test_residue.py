@@ -22,11 +22,11 @@ class TestResidue(unittest.TestCase):
 
 class TestResidueFactory(unittest.TestCase):
     def setUp(self) -> None:
-        self.pdb_ids = ['1foo', '2bar', '3baz']
-        self.factory = ResidueFactory()
+        pdb_ids = ['1foo', '2bar', '3baz']
+        self.factory = ResidueFactory(pdb_id_lst=pdb_ids)
 
     def test_construct(self):
-        self.instance_dct = self.factory.construct(instance_names=self.pdb_ids)
+        self.instance_dct = self.factory.construct()
         for key, val in self.instance_dct.items():
             #print(f'Instance name: {key}, Instance: {val}')
             self.assertIsInstance(val, Residue)
