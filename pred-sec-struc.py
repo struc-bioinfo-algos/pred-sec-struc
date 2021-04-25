@@ -4,6 +4,7 @@ import sys
 import logging
 import argparse
 import time
+from src.residue import AminoAcid, Target
 from src.generate_model import GenerateModel
 
 
@@ -11,6 +12,11 @@ def main():
 
     logger = initiate_logging()
     logger.info("Welcome to pred-sec-struc!")
+
+    # Set up input and target encoding.
+    AminoAcid.get_table()
+    Target.get_table()
+
     args = argparser()
 
     if args.generate:
@@ -32,10 +38,10 @@ def argparser():
     group = parser.add_mutually_exclusive_group()
     group.add_argument(
         '-g', '--generate-model', default=False, action='store_true', dest='generate',
-        help='generate a model (requires PDB ID)'
+        help='generate a model (requires Training Data Set)'
     )
     parser.add_argument(
-        'PDBID', nargs='?', help='PDB ID of protein'
+        'train', nargs='?', help='Training Data Set'
     )
 
 
