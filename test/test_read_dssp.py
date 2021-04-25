@@ -22,7 +22,7 @@ class TestReadDSSP(unittest.TestCase):
     def test_extract_info_from_line_no_structure(self):
         aa, structure, tag = ReadDSSP.extract_info_from_line(self.dssp_line2)
         self.assertTrue('A' in aa)
-        self.assertTrue(structure.isspace())
+        self.assertTrue(structure == '')
         self.assertTrue('NO_STRUCTURE' in tag.name)
 
     def test_read_happy(self):
@@ -31,7 +31,7 @@ class TestReadDSSP(unittest.TestCase):
             lst = ReadDSSP.read(self.dssp_test_filename)
             self.assertFalse(lst == [])
             self.assertTrue(isinstance(lst[0], tuple))
-            self.assertTrue(lst[0].amino_acid == 'P')
+            self.assertTrue(lst[0].amino_acid == 'V')
             self.assertTrue(lst[0].category == 'c')
 
     def test_dssp_label_to_category_alpha_helix(self):
