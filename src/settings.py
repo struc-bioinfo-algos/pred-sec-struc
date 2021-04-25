@@ -2,12 +2,15 @@
 
 import configparser
 
+
 config = configparser.ConfigParser()
 config.read('settings.ini')
 
 
 class Settings:
     """Static class to read settings.ini"""
-
-    dssp_path = config.get('DEFAULT', 'DSSP_PATH')
-
+    config = config
+    dssp_path = config.get(section='PATHS', option='DsspPath')
+    dssp_extension = config.get(section='PATHS', option='DsspExtension')
+    amino_acids = config.get(section='PATHS', option='AminoAcidTable')
+    target = config.get(section='LABELS', option='Target')

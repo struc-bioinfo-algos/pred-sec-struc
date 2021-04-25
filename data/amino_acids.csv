@@ -1,0 +1,21 @@
+Amino Acid,Single-letter-abbreviation,Encoding
+Alanine,A,0
+Cysteine,C,1
+Aspartic acid,D,2
+Glutamic acid,E,3
+Phenylalanine,F,4
+Glycine,G,5
+Histidine,H,6
+Isoleucine,I,7
+Lysine,K,8
+Leucine,L,9
+Methionine,M,10
+Asparagine,N,11
+Proline,P,12
+Glutamine,Q,13
+Arginine,R,14
+Serine,S,15
+Threonine,T,16
+Valine,V,17
+Tryptophan,W,18
+Tyrosine,Y,19

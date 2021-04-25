@@ -1,6 +1,8 @@
 # Specific to pred-sec-struc
 main.log
 .venv
+myvenv
+.idea
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
