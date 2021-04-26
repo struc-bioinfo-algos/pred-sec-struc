@@ -50,9 +50,9 @@ class Training:
                 self.pdb_lst.append(line)
 
     def triage_residue_instances(self, data: dict) -> dict:
-        """Removes residues instances from data that (for reasons unknown to me) have not data in their
-        X_data or Y_data. I didn't pursue this any further. Even without the triaged data there are >70
-        proteins in left to train on..."""
+        """Removes residues instances from data that (for reasons unknown to me) have no data in their
+        X_data or Y_data. I didn't pursue the reasons for it any further. Even without the triaged data
+        there are >70 proteins in left to train on..."""
         triage_lst = []
         for name, object in data.items():
             if object.residue_count == 0:

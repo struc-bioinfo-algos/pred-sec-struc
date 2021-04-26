@@ -5,7 +5,6 @@ import logging
 import argparse
 import time
 from src.training import Training
-from src.generate_model import GenerateModel
 
 
 def main():
