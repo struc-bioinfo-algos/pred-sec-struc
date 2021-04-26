@@ -4,6 +4,7 @@ import sys
 import logging
 import argparse
 import time
+from src.training import Training
 from src.generate_model import GenerateModel
 
 
@@ -11,17 +12,22 @@ def main():
 
     logger = initiate_logging()
     logger.info("Welcome to pred-sec-struc!")
+
     args = argparser()
 
     if args.generate:
         start = time.time()
-        model = GenerateModel(args.PDBID)
+        dataset_type = 'q_s_tab1'  # Quian and Sejnowski data set from their table 1
+        model = Training(dataset_type=dataset_type)
         try:
-            data = model.generate()
+            model.get_pdb_lst()
+            model.preprocess()
+            model.train()
         except TypeError:
             logger.error('option -g requires a PDB ID as argument')
             sys.exit()
 
+        logger.info('Generated multi-layer neural network model...')
         logger.info(f'That took {get_elapsed_time(start_time=start)} min')
 
 
@@ -32,12 +38,8 @@ def argparser():
     group = parser.add_mutually_exclusive_group()
     group.add_argument(
         '-g', '--generate-model', default=False, action='store_true', dest='generate',
-        help='generate a model (requires PDB ID)'
+        help='generate a model (requires Training Data Set)'
     )
-    parser.add_argument(
-        'PDBID', nargs='?', help='PDB ID of protein'
-    )
-
 
     return parser.parse_args()
 

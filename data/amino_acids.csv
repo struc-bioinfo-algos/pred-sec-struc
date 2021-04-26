@@ -1,21 +1,22 @@
 Amino Acid,Single-letter-abbreviation,Encoding
-Alanine,A,0
-Cysteine,C,1
-Aspartic acid,D,2
-Glutamic acid,E,3
-Phenylalanine,F,4
-Glycine,G,5
-Histidine,H,6
-Isoleucine,I,7
-Lysine,K,8
-Leucine,L,9
-Methionine,M,10
-Asparagine,N,11
-Proline,P,12
-Glutamine,Q,13
-Arginine,R,14
-Serine,S,15
-Threonine,T,16
-Valine,V,17
-Tryptophan,W,18
-Tyrosine,Y,19
+gap,-,0
+Alanine,A,1
+Cysteine,C,2
+Aspartic acid,D,3
+Glutamic acid,E,4
+Phenylalanine,F,5
+Glycine,G,6
+Histidine,H,7
+Isoleucine,I,8
+Lysine,K,9
+Leucine,L,10
+Methionine,M,11
+Asparagine,N,12
+Proline,P,13
+Glutamine,Q,14
+Arginine,R,15
+Serine,S,16
+Threonine,T,17
+Valine,V,18
+Tryptophan,W,19
+Tyrosine,Y,20
