@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import unittest
+import numpy as np
 from unittest.mock import patch, PropertyMock
 from src.residue import Residue, ResidueFactory, AminoAcid, Target
 
@@ -9,23 +10,31 @@ class TestResidue(unittest.TestCase):
     def setUp(self) -> None:
         self.dssp_test_filename = '1tes'
         self.dssp_path = './test'
+        Target.get_table()
         with patch('src.settings.Settings.dssp_path', new_callable=PropertyMock) as prop:
             prop.return_value = self.dssp_path
             self.residue = Residue(pdb_id=self.dssp_test_filename)
             self.residue.set_residue_and_structure()
-        Target.get_table()
+            self.residue.get_category_frequencies()
+            self.residue.get_X_and_Y_arrays()
 
     def test_set_residue_and_structure(self):
-            self.assertEqual(len(self.residue.residue_and_structure), 577)
+            self.assertEqual(len(self.residue.residue_and_structure), 506)
             self.assertEqual(self.residue.residue_and_structure[384].amino_acid, 'V')
-            self.assertEqual(self.residue.residue_and_structure[176].category, 'c')
+            self.assertEqual(self.residue.residue_and_structure[176].category, 'a')
 
     def test_get_category_frequencies(self):
-        self.residue.get_category_frequencies()
         self.assertTrue(self.residue.category_frequencies['a'] > 0.5)
         self.assertTrue(self.residue.category_frequencies['b'] == 0)
         self.assertTrue(self.residue.category_frequencies['c'] < 0.5)
 
+    def test_X_array(self):
+        self.assertTrue(isinstance(self.residue.X_data, np.ndarray))
+        self.assertEqual(len(self.residue.X_data), 506)
+
+    def test_Y_array(self):
+        self.assertTrue(isinstance(self.residue.Y_data, np.ndarray))
+        self.assertEqual(len(self.residue.Y_data), 506)
 
 
 class TestResidueFactory(unittest.TestCase):
