@@ -14,7 +14,7 @@ def main():
 
     args = argparser()
 
-    if args.generate:
+    if args.train:
         start = time.time()
         dataset_type = 'q_s_tab1'  # Quian and Sejnowski data set from their table 1
         model = Training(dataset_type=dataset_type)
@@ -36,8 +36,8 @@ def argparser():
     )
     group = parser.add_mutually_exclusive_group()
     group.add_argument(
-        '-g', '--generate-model', default=False, action='store_true', dest='generate',
-        help='generate a model (requires Training Data Set)'
+        '-t', '--train-model', default=False, action='store_true', dest='train',
+        help='train a neural network model'
     )
 
     return parser.parse_args()
