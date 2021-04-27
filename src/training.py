@@ -35,10 +35,12 @@ class Training:
                 self.Y_data = np.concatenate((self.Y_data, obj.Y_data))
 
     def train(self):
+        number_hidden_units = 13
+        number_hidden_layers = 2
         self.classifier = MLPClassifier(
             solver='lbfgs',
             alpha=1e5,
-            hidden_layer_sizes=(5, 2),
+            hidden_layer_sizes=(number_hidden_units, number_hidden_layers),
             random_state=1
         )
 
