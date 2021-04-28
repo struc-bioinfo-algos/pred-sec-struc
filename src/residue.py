@@ -2,10 +2,12 @@
 
 import csv
 import numpy as np
+import logging
 from sklearn import preprocessing
 from src.read_dssp import ReadDSSP
 from src.settings import Settings
 
+logger = logging.getLogger(__name__)
 
 class Residue:
     def __init__(self, pdb_id: str = None, window_length: int = 13):
@@ -110,11 +112,17 @@ class ResidueFactory:
         self.instance_names: list = pdb_id_lst
 
     def construct(self) -> dict:
-        residues: dict = {instance_name: Residue(pdb_id=instance_name) for instance_name in self.instance_names}
-        for residue_instance in residues.values():
-            residue_instance.set_residue_and_structure()
-            residue_instance.get_category_frequencies()
-            residue_instance.get_X_and_Y_arrays()
+        residues: dict = {}
+        for instance_name in self.instance_names:
+            try:
+                residue_instance = Residue(pdb_id=instance_name) 
+                residue_instance.set_residue_and_structure()
+                residue_instance.get_category_frequencies()
+                residue_instance.get_X_and_Y_arrays()
+                residues[instance_name] = residue_instance
+            except:
+                logger.info(f'Error creating residue {instance_name}')
+                continue
 
         return residues
 

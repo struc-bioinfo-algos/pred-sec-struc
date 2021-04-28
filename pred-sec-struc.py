@@ -46,12 +46,12 @@ def argparser():
 
 def initiate_logging() -> logging.Logger:
     logfile_name = 'main.log'
-    logging.basicConfig(filename=logfile_name, format = '%(asctime)s - %(message)s', level = logging.INFO)
+    logging.basicConfig(filename=logfile_name, filemode='w', format = '%(asctime)s - %(message)s', level = logging.INFO)
     return logging.getLogger(__name__)
 
 
 def get_elapsed_time(start_time):
-        return round((time.time() - start_time) / 60)
+    return round((time.time() - start_time) / 60)
 
 
 if __name__ == "__main__":
