@@ -5,6 +5,7 @@ import logging
 import argparse
 import time
 from src.training import Training
+from src.predict import Predict
 from joblib import dump
 
 
@@ -15,7 +16,7 @@ def main():
 
     args = argparser()
 
-    if args.train or args.train_write:
+    if args.train or args.train_predict or args.train_write:
         start = time.time()
         dataset_type = 'q_s_tab1'  # Quian and Sejnowski data set from their table 1
         model = Training(dataset_type=dataset_type)
@@ -33,6 +34,11 @@ def main():
         logger.info('Generated multi-layer neural network model...')
         logger.info(f'That took {get_elapsed_time(start_time=start)} min')
 
+    if args.train_predict:
+        predict = Predict(pdb_id=args.pdb.lower(), model=model)
+        predict.predict()
+        predict.accuracy()
+
 
 def argparser():
     parser = argparse.ArgumentParser(
@@ -47,6 +53,14 @@ def argparser():
         '-tw', '--train-write', default=False, action='store_true', dest='train_write',
         help='train a neural network model and write model to disk'
     )
+    group.add_argument(
+        '-tp', '--train-predict', default=False, action='store_true', dest='train_predict',
+        help='train a neural network model and predict structure (requires [pdb])'
+    )
+    parser.add_argument(
+        'pdb', nargs='?', help='a PDB ID whose structure is predicted'
+    )
+
 
     return parser.parse_args()
 
