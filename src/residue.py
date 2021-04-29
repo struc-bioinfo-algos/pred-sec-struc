@@ -50,10 +50,12 @@ class Residue:
         """This constructs the X array that holds the features. Each row is of window length and
         referred to as a group. The number of groups in X corresponds to the number of residues in the
         protein, minus the window length."""
-        input_group_units = np.array(['A', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'Y'])
+        if self.residue_count <= 0:
+            return
+        input_group_units = np.array(list(self.amino_acids.keys()))
         input_group_units_length = input_group_units.shape[0]
 
-        ouput_units = np.array(['a', 'b', 'c'])
+        ouput_units = np.array(list(self.targets.keys()))
 
         self.X_data = np.zeros((self.residue_count - self.window_length, self.window_length * input_group_units_length))
         self.Y_data = np.zeros((self.residue_count - self.window_length, len(ouput_units)))
