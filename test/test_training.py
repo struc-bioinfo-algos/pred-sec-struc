@@ -19,6 +19,7 @@ class TestTraining(unittest.TestCase):
         self.assertEqual(self.training.X_data.size, 2320101)
         self.assertEqual(self.training.Y_data.size, 47349)
 
+    @unittest.skip
     def test_train(self):
         self.training.train()
 
