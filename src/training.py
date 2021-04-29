@@ -23,7 +23,7 @@ class Training:
         factory = ResidueFactory(pdb_id_lst=self.pdb_lst)
         data: dict = factory.construct()
         logger.info(f'Preprocessing {len(data)} DSSP files...')
-        data = self.triage_residue_instances(data=data)
+        # data = self.triage_residue_instances(data=data)
         first = True
         for obj in data.values():
             if first:
@@ -43,6 +43,7 @@ class Training:
             hidden_layer_sizes=(number_hidden_units, number_hidden_layers),
             random_state=1
         )
+        self.classifier.fit(self.X_data, self.Y_data)
 
     def get_pdb_lst(self):
         filepath = Settings.q_s_tab1

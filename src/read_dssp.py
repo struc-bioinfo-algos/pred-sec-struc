@@ -48,7 +48,7 @@ class ReadDSSP:
         """Read DSSP file of PDB ID and return a list of (AA, structure label) tuples."""
         residue_and_category_lst = []
         filename = cls.get_filename(pdb_id=pdb_id)
-        logger.info(f'filename: {filename}')
+        # logger.info(f'filename: {filename}')
         read_line = False
         try:
             with open(filename, 'r') as fp:
@@ -64,7 +64,8 @@ class ReadDSSP:
                             residue_and_category_lst.append(res_and_struc)
         except FileNotFoundError as err:
             logger.info(f'Error {err.errno}: File {filename} not found - check path in settings.ini')
-            logger.info(f'DSSP file {filename} may not be on disk')
+            # logger.info(f'DSSP file {filename} may not be on disk')
+            raise err
 
         return residue_and_category_lst
 
