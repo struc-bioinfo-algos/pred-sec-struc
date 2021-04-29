@@ -18,3 +18,4 @@ class Predict:
 
     def accuracy(self):
         print(self.Y_data)
+
