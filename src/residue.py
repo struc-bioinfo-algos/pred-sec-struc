@@ -10,21 +10,21 @@ from src.settings import Settings
 logger = logging.getLogger(__name__)
 
 class Residue:
-    def __init__(self, pdb_id: str = None, window_length: int = 13):
+    def __init__(self, pdb_id: str = None, window_length: int = int(Settings.window_length)):
         self.pdb_id: str = pdb_id
         self.window_length: int = window_length
         self.central_aa_pos = int(np.ceil(self.window_length / 2))
-        self.is_setup: bool = False
-        self.read_seq = ReadDSSP
-        self.residue_and_structure: list[tuple] = []
-        self.residue_count: int = 0
-        self.category_frequencies: dict = {'a': 0, 'b': 0, 'c': 0}
-        self.X_data: np.array = None
-        self.Y_data: np.array = None
         AminoAcid.get_table()
         self.amino_acids = AminoAcid.mapping
         Target.get_table()
         self.targets = Target.mapping
+        self.is_setup: bool = False
+        self.read_seq = ReadDSSP
+        self.residue_and_structure: list[tuple] = []
+        self.residue_count: int = 0
+        self.category_frequencies: dict = {target: 0 for target in self.targets.keys()}
+        self.X_data: np.array = None
+        self.Y_data: np.array = None
 
     def set_residue_and_structure(self) -> None:
         self.residue_and_structure = self.read_seq.read(pdb_id=self.pdb_id)
