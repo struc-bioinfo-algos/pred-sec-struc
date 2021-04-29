@@ -36,14 +36,14 @@ class Training:
                 self.Y_data = np.concatenate((self.Y_data, obj.Y_data))
 
     def train(self):
-        number_hidden_units = 13
-        number_hidden_layers = 4
+        number_hidden_units = 5
+        number_hidden_layers = 2
         logger.info(f'Training multi-layer perceptron with {number_hidden_layers}')
         self.classifier = MLPClassifier(
             solver='lbfgs',
             alpha=1e5,
             hidden_layer_sizes=(number_hidden_units, number_hidden_layers),
-            max_iter=300,
+            max_iter=100,
             activation='relu',
             random_state=1
         )
