@@ -13,7 +13,7 @@ class TestTraining(unittest.TestCase):
     def test_get_pdb_lst(self):
         self.assertTrue(isinstance(self.training.pdb_lst, list))
         self.assertEqual(self.training.pdb_lst[0], '1acx')
-        self.assertEqual(len(self.training.pdb_lst), 106)
+        self.assertEqual(len(self.training.pdb_lst), 105)
 
     def test_preprocess(self):
         self.assertEqual(self.training.X_data.size, 4192461)
