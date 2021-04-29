@@ -13,7 +13,7 @@ class TestResidue(unittest.TestCase):
         Target.get_table()
         with patch('src.settings.Settings.dssp_path', new_callable=PropertyMock) as prop:
             prop.return_value = self.dssp_path
-            self.residue = Residue(pdb_id=self.dssp_test_filename)
+            self.residue = Residue(pdb_id=self.dssp_test_filename, window_length=5)
             self.residue.set_residue_and_structure()
             self.residue.get_category_frequencies()
             self.residue.get_X_and_Y_arrays()
@@ -30,11 +30,11 @@ class TestResidue(unittest.TestCase):
 
     def test_X_array(self):
         self.assertTrue(isinstance(self.residue.X_data, np.ndarray))
-        self.assertEqual(len(self.residue.X_data), 493)
+        self.assertEqual(len(self.residue.X_data), 501)
 
     def test_Y_array(self):
         self.assertTrue(isinstance(self.residue.Y_data, np.ndarray))
-        self.assertEqual(len(self.residue.Y_data), 493)
+        self.assertEqual(len(self.residue.Y_data), 501)
 
 
 class TestResidueFactory(unittest.TestCase):
