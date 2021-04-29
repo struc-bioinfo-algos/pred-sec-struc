@@ -16,6 +16,7 @@ class Training:
         self.Y_data: np.ndarray = None
         self.pdb_lst: list = []
         self.classifier = None
+        self.model = None
 
     def preprocess(self):
         """Fetch PDB IDs of the files to use in training. Load the DSSP data from each file,
@@ -36,14 +37,18 @@ class Training:
 
     def train(self):
         number_hidden_units = 13
-        number_hidden_layers = 2
+        number_hidden_layers = 4
+        logger.info(f'Training multi-layer perceptron with {number_hidden_layers}')
         self.classifier = MLPClassifier(
             solver='lbfgs',
             alpha=1e5,
             hidden_layer_sizes=(number_hidden_units, number_hidden_layers),
+            max_iter=300,
+            activation='relu',
             random_state=1
         )
-        self.classifier.fit(self.X_data, self.Y_data)
+        self.model = self.classifier.fit(self.X_data, self.Y_data)
+        logger.info(f'Model: {self.model}')
 
     def get_pdb_lst(self):
         filepath = Settings.q_s_tab1
