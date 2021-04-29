@@ -16,8 +16,8 @@ class TestTraining(unittest.TestCase):
         self.assertEqual(len(self.training.pdb_lst), 106)
 
     def test_preprocess(self):
-        self.assertEqual(self.training.X_data.size, 16280 * 13)
-        self.assertEqual(self.training.Y_data.size, 16280 * 1)
+        self.assertEqual(self.training.X_data.size, 4192461)
+        self.assertEqual(self.training.Y_data.size, 46071)
 
     def test_train(self):
         self.training.train()

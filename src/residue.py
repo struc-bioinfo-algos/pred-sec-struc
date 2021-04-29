@@ -50,10 +50,16 @@ class Residue:
         """This constructs the X array that holds the features. Each row is of window length and
         referred to as a group. The number of groups in X corresponds to the number of residues in the
         protein, minus the window length."""
-        self.X_data = np.zeros((self.residue_count, self.window_length))
-        self.Y_data = np.zeros((self.residue_count))
+        if self.residue_count <= 0:
+            return
+        input_group_units = np.array(list(self.amino_acids.keys()))
+        input_group_units_length = input_group_units.shape[0]
+
+        ouput_units = np.array(list(self.targets.keys()))
+
+        self.X_data = np.zeros((self.residue_count - self.window_length, self.window_length * input_group_units_length))
+        self.Y_data = np.zeros((self.residue_count - self.window_length, len(ouput_units)))
         residue_counter = 0
-        cache = np.zeros(self.window_length)
         first_iteration = True
         while residue_counter < (self.residue_count - self.window_length):
             start = residue_counter
@@ -61,19 +67,28 @@ class Residue:
             unit_index = 0
             if first_iteration:
                 for idx in range(start, stop):
-                    aa: int = self._get_numerical_val_for_amino_acid(index=idx)
-                    self.X_data[residue_counter][unit_index] = aa
+                    current_aa = self.residue_and_structure[idx].amino_acid
+                    current_units = np.where(input_group_units == current_aa, 1, 0)
+
+                    x_start_range = unit_index * input_group_units_length
+                    x_end_range = x_start_range + input_group_units_length
+
+                    self.X_data[residue_counter][x_start_range:x_end_range] = current_units
                     unit_index += 1
                     first_iteration = False
             else:
-                aa: int = self._get_numerical_val_for_amino_acid(index=stop)
-                self.X_data[residue_counter] = cache
-                self.X_data[residue_counter][self.window_length - 1] = aa
+                current_aa = self.residue_and_structure[idx].amino_acid
+                current_units = np.where(input_group_units == current_aa, 1, 0)
+
+                self.X_data[residue_counter] = np.append(
+                    self.X_data[residue_counter-1][input_group_units_length:],
+                    current_units
+                )
+            
             # Get Y-data:
-            category = self._get_numerical_val_for_category(residue_counter + self.central_aa_pos)
-            self.Y_data[residue_counter] = category
-            # Cache all values in group except the first one.
-            cache[:-1] = self.X_data[residue_counter][1:]
+            category = self.residue_and_structure[idx].category
+            self.Y_data[residue_counter] = np.where(ouput_units == category, 1, 0)
+
             residue_counter += 1
 
     def _get_numerical_val_for_amino_acid(self, index: int) -> int:

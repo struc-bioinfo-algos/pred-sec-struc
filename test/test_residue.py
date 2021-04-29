@@ -30,11 +30,11 @@ class TestResidue(unittest.TestCase):
 
     def test_X_array(self):
         self.assertTrue(isinstance(self.residue.X_data, np.ndarray))
-        self.assertEqual(len(self.residue.X_data), 506)
+        self.assertEqual(len(self.residue.X_data), 493)
 
     def test_Y_array(self):
         self.assertTrue(isinstance(self.residue.Y_data, np.ndarray))
-        self.assertEqual(len(self.residue.Y_data), 506)
+        self.assertEqual(len(self.residue.Y_data), 493)
 
 
 class TestResidueFactory(unittest.TestCase):
