@@ -18,13 +18,9 @@ def main():
         start = time.time()
         dataset_type = 'q_s_tab1'  # Quian and Sejnowski data set from their table 1
         model = Training(dataset_type=dataset_type)
-        try:
-            model.get_pdb_lst()
-            model.preprocess()
-            model.train()
-        except TypeError:
-            logger.error('option -g requires a PDB ID as argument')
-            sys.exit()
+        model.get_pdb_lst()
+        model.preprocess()
+        model.train()
 
         logger.info('Generated multi-layer neural network model...')
         logger.info(f'That took {get_elapsed_time(start_time=start)} min')
