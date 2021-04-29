@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
-import sys
+import os
 import logging
 import argparse
 import time
 from src.training import Training
+from joblib import dump
 
 
 def main():
@@ -14,17 +15,20 @@ def main():
 
     args = argparser()
 
-    if args.train:
+    if args.train or args.train_write:
         start = time.time()
         dataset_type = 'q_s_tab1'  # Quian and Sejnowski data set from their table 1
         model = Training(dataset_type=dataset_type)
-        try:
-            model.get_pdb_lst()
-            model.preprocess()
-            model.train()
-        except TypeError:
-            logger.error('option -g requires a PDB ID as argument')
-            sys.exit()
+        model.get_pdb_lst()
+        model.preprocess()
+        model.train()
+        if args.train_write:
+            model_dir = './models'
+            if not os.path.exists(model_dir):
+                os.makedirs(model_dir)
+            filename = os.path.join(model_dir, 'neural_net.model')
+            logger.info(f'Writing model to {filename}')
+            dump(model, filename)
 
         logger.info('Generated multi-layer neural network model...')
         logger.info(f'That took {get_elapsed_time(start_time=start)} min')
@@ -38,6 +42,10 @@ def argparser():
     group.add_argument(
         '-t', '--train-model', default=False, action='store_true', dest='train',
         help='train a neural network model'
+    )
+    group.add_argument(
+        '-tw', '--train-write', default=False, action='store_true', dest='train_write',
+        help='train a neural network model and write model to disk'
     )
 
     return parser.parse_args()
