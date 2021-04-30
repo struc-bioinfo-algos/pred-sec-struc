@@ -36,10 +36,10 @@ class Residue:
             pass
         for category in Target.sec_structure.values():
             count = self._get_frequency(category)
-            if self.is_division_by_zero(numerator=count):
-                self.category_frequencies[category] = 0
-            else:
+            try:
                 self.category_frequencies[category] = count / self.residue_count
+            except ZeroDivisionError:
+                self.category_frequencies[category] = 0
 
     def _get_frequency(self, category: str) -> int:
         count: int = 0
@@ -89,7 +89,7 @@ class Residue:
             
             # Get Y-data:
             category = self.residue_and_structure[idx].category
-            self.Y_data[residue_counter] = np.where(ouput_units == category, 1, 0)
+            self.Y_data[residue_counter] = self.get_onehot_encoded_label(target_units=ouput_units, label=category)
 
             residue_counter += 1
 
@@ -101,9 +101,8 @@ class Residue:
         """Returns numerical value for category as defined in target.csv."""
         return self.targets[self.residue_and_structure[index].category]
 
-    @staticmethod
-    def is_division_by_zero(numerator) -> bool:
-        return numerator == 0
+    def get_onehot_encoded_label(self, target_units: np.ndarray, label: str) -> np.ndarray:
+        return np.where(target_units == label, 1, 0)
 
 
 class ResidueFactory:

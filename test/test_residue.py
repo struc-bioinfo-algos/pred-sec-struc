@@ -17,6 +17,13 @@ class TestResidue(unittest.TestCase):
             self.residue.set_residue_and_structure()
             self.residue.get_category_frequencies()
             self.residue.get_X_and_Y_arrays()
+            self.target_units = np.array(list(self.residue.targets.keys()))
+        self.label_a = 'a'
+        self.label_b = 'b'
+        self.label_c = 'c'
+        self.aa_lst = np.array([
+            '-', 'A', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'Y'
+        ])
 
     def test_set_residue_and_structure(self):
             self.assertEqual(len(self.residue.residue_and_structure), 506)
@@ -35,6 +42,28 @@ class TestResidue(unittest.TestCase):
     def test_Y_array(self):
         self.assertTrue(isinstance(self.residue.Y_data, np.ndarray))
         self.assertEqual(len(self.residue.Y_data), 501)
+
+    def test_get_onehot_encoded_label_a(self):
+        observed = self.residue.get_onehot_encoded_label(target_units=self.target_units, label=self.label_a)
+        expected = np.array([1, 0, 0])
+        self.assertTrue(all(expected == observed))
+
+    def test_get_onehot_encoded_label_b(self):
+        observed = self.residue.get_onehot_encoded_label(target_units=self.target_units, label=self.label_b)
+        expected = np.array([0, 1, 0])
+        self.assertTrue(all(expected == observed))
+
+    def test_get_onehot_encoded_label_c(self):
+        observed = self.residue.get_onehot_encoded_label(target_units=self.target_units, label=self.label_c)
+        expected = np.array([0, 0, 1])
+        self.assertTrue(all(expected == observed))
+
+    def test_get_onehot_encoded_label_aa(self):
+        aa = 'G'
+        expected = np.array([0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        observed = self.residue.get_onehot_encoded_label(target_units=self.aa_lst, label=aa)
+        self.assertTrue(all(expected == observed))
+
 
 
 class TestResidueFactory(unittest.TestCase):
