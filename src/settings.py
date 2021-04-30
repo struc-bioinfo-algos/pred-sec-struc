@@ -11,6 +11,7 @@ class Settings:
     """Static class to read settings.ini"""
     config = config
     dssp_path = config.get(section='PATHS', option='DsspPath')
+    model_path = config.get(section='PATHS', option='ModelPath')
     dssp_extension = config.get(section='PATHS', option='DsspExtension')
     amino_acids = config.get(section='PATHS', option='AminoAcidTable')
     target = config.get(section='LABELS', option='Target')

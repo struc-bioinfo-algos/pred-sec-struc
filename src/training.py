@@ -24,7 +24,6 @@ class Training:
         factory = ResidueFactory(pdb_id_lst=self.pdb_lst)
         data: dict = factory.construct()
         logger.info(f'Preprocessing {len(data)} DSSP files...')
-        # data = self.triage_residue_instances(data=data)
         first = True
         for obj in data.values():
             if first:
@@ -36,19 +35,19 @@ class Training:
                 self.Y_data = np.concatenate((self.Y_data, obj.Y_data))
 
     def train(self):
-        number_hidden_units = 5
-        number_hidden_layers = 2
+        number_hidden_units = 10
+        number_hidden_layers = 3
         logger.info(f'Training multi-layer perceptron with {number_hidden_layers}')
         self.classifier = MLPClassifier(
             solver='lbfgs',
-            alpha=1e5,
+            alpha=1e-5,
             hidden_layer_sizes=(number_hidden_units, number_hidden_layers),
             max_iter=100,
             activation='relu',
             random_state=1
         )
         self.model = self.classifier.fit(self.X_data, self.Y_data)
-        logger.info(f'Model: {self.model}')
+        logger.info(f'Model: {self.model.__repr__()}')
 
     def get_pdb_lst(self):
         filepath = Settings.q_s_tab1

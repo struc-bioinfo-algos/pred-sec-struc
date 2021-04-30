@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
 import os
+import sys
 import logging
 import argparse
 import time
+from src.settings import Settings
 from src.training import Training
 from src.predict import Predict
 from joblib import dump
@@ -24,7 +26,7 @@ def main():
         model.preprocess()
         model.train()
         if args.train_write:
-            model_dir = './models'
+            model_dir = Settings.model_path
             if not os.path.exists(model_dir):
                 os.makedirs(model_dir)
             filename = os.path.join(model_dir, 'neural_net.model')
@@ -32,10 +34,16 @@ def main():
             dump(model, filename)
 
         logger.info('Generated multi-layer neural network model...')
-        logger.info(f'That took {get_elapsed_time(start_time=start)} min')
+        logger.info(f'That took {get_elapsed_time(start_time=start)} s')
 
     if args.train_predict:
-        predict = Predict(pdb_id=args.pdb.lower(), model=model)
+        try:
+            predict = Predict(pdb_id=args.pdb.lower(), model=model.model)
+        except AttributeError as err:
+            msg = f'{err.__repr__()}: flag -tp requires a PDB ID as argument'
+            logger.error(msg)
+            print(msg)
+            sys.exit()
         predict.predict()
         predict.accuracy()
 
@@ -68,12 +76,13 @@ def argparser():
 
 def initiate_logging() -> logging.Logger:
     logfile_name = 'main.log'
-    logging.basicConfig(filename=logfile_name, filemode='w', format = '%(asctime)s - %(message)s', level = logging.INFO)
+    #logging.basicConfig(filename=logfile_name, filemode='w', format = '%(asctime)s - %(message)s', level = logging.INFO)
+    logging.basicConfig(filename=logfile_name, format='%(asctime)s - %(message)s', level=logging.INFO)
     return logging.getLogger(__name__)
 
 
 def get_elapsed_time(start_time):
-    return round((time.time() - start_time) / 60)
+    return round(time.time() - start_time)
 
 
 if __name__ == "__main__":

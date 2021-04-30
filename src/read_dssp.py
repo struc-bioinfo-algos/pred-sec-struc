@@ -63,8 +63,7 @@ class ReadDSSP:
                             res_and_struc = cls.ResidueAndCategory(amino_acid=aa.strip().upper(), category=cat)
                             residue_and_category_lst.append(res_and_struc)
         except FileNotFoundError as err:
-            logger.info(f'Error {err.errno}: File {filename} not found - check path in settings.ini')
-            # logger.info(f'DSSP file {filename} may not be on disk')
+            logger.info(f'{err.__repr__()}: {filename} might be missing; also check path in settings.ini')
             raise err
 
         return residue_and_category_lst

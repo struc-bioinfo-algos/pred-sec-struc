@@ -61,10 +61,10 @@ class Residue:
 
         self.X_data = np.zeros((self.residue_count - self.window_length, self.window_length * input_group_units_length))
         self.Y_data = np.zeros((self.residue_count - self.window_length, len(ouput_units)))
-        residue_counter = 0
+        residue_counter = self.central_aa_pos # 0
         first_iteration = True
         while residue_counter < (self.residue_count - self.window_length):
-            start = residue_counter
+            start = residue_counter - self.central_aa_pos
             stop = start + self.window_length
             unit_index = 0
             if first_iteration:
@@ -88,7 +88,7 @@ class Residue:
                 )
             
             # Get Y-data:
-            category = self.residue_and_structure[idx].category
+            category = self.residue_and_structure[residue_counter].category
             self.Y_data[residue_counter] = self.get_onehot_encoded_label(target_units=ouput_units, label=category)
 
             residue_counter += 1

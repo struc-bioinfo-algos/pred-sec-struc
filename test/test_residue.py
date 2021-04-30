@@ -26,9 +26,9 @@ class TestResidue(unittest.TestCase):
         ])
 
     def test_set_residue_and_structure(self):
-            self.assertEqual(len(self.residue.residue_and_structure), 506)
-            self.assertEqual(self.residue.residue_and_structure[384].amino_acid, 'V')
-            self.assertEqual(self.residue.residue_and_structure[176].category, 'a')
+        self.assertEqual(len(self.residue.residue_and_structure), 506)
+        self.assertEqual(self.residue.residue_and_structure[384].amino_acid, 'V')
+        self.assertEqual(self.residue.residue_and_structure[176].category, 'a')
 
     def test_get_category_frequencies(self):
         self.assertTrue(self.residue.category_frequencies['a'] > 0.5)
@@ -63,7 +63,6 @@ class TestResidue(unittest.TestCase):
         expected = np.array([0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         observed = self.residue.get_onehot_encoded_label(target_units=self.aa_lst, label=aa)
         self.assertTrue(all(expected == observed))
-
 
 
 class TestResidueFactory(unittest.TestCase):
