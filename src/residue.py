@@ -70,7 +70,7 @@ class Residue:
             if first_iteration:
                 for idx in range(start, stop):
                     current_aa = self.residue_and_structure[idx].amino_acid
-                    current_units = np.where(input_group_units == current_aa, 1, 0)
+                    current_units = self.get_onehot_encoded_label(target_units=input_group_units, label=current_aa)
 
                     x_start_range = unit_index * input_group_units_length
                     x_end_range = x_start_range + input_group_units_length
