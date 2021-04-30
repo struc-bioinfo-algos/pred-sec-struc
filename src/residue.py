@@ -10,21 +10,21 @@ from src.settings import Settings
 logger = logging.getLogger(__name__)
 
 class Residue:
-    def __init__(self, pdb_id: str = None, window_length: int = 13):
+    def __init__(self, pdb_id: str = None, window_length: int = int(Settings.window_length)):
         self.pdb_id: str = pdb_id
         self.window_length: int = window_length
         self.central_aa_pos = int(np.ceil(self.window_length / 2))
-        self.is_setup: bool = False
-        self.read_seq = ReadDSSP
-        self.residue_and_structure: list[tuple] = []
-        self.residue_count: int = 0
-        self.category_frequencies: dict = {'a': 0, 'b': 0, 'c': 0}
-        self.X_data: np.array = None
-        self.Y_data: np.array = None
         AminoAcid.get_table()
         self.amino_acids = AminoAcid.mapping
         Target.get_table()
         self.targets = Target.mapping
+        self.is_setup: bool = False
+        self.read_seq = ReadDSSP
+        self.residue_and_structure: list[tuple] = []
+        self.residue_count: int = 0
+        self.category_frequencies: dict = {target: 0 for target in self.targets.keys()}
+        self.X_data: np.array = None
+        self.Y_data: np.array = None
 
     def set_residue_and_structure(self) -> None:
         self.residue_and_structure = self.read_seq.read(pdb_id=self.pdb_id)
@@ -36,10 +36,10 @@ class Residue:
             pass
         for category in Target.sec_structure.values():
             count = self._get_frequency(category)
-            if self.is_division_by_zero(numerator=count):
-                self.category_frequencies[category] = 0
-            else:
+            try:
                 self.category_frequencies[category] = count / self.residue_count
+            except ZeroDivisionError:
+                self.category_frequencies[category] = 0
 
     def _get_frequency(self, category: str) -> int:
         count: int = 0
@@ -61,16 +61,16 @@ class Residue:
 
         self.X_data = np.zeros((self.residue_count - self.window_length, self.window_length * input_group_units_length))
         self.Y_data = np.zeros((self.residue_count - self.window_length, len(ouput_units)))
-        residue_counter = 0
+        residue_counter = self.central_aa_pos # 0
         first_iteration = True
         while residue_counter < (self.residue_count - self.window_length):
-            start = residue_counter
+            start = residue_counter - self.central_aa_pos
             stop = start + self.window_length
             unit_index = 0
             if first_iteration:
                 for idx in range(start, stop):
                     current_aa = self.residue_and_structure[idx].amino_acid
-                    current_units = np.where(input_group_units == current_aa, 1, 0)
+                    current_units = self.get_onehot_encoded_label(target_units=input_group_units, label=current_aa)
 
                     x_start_range = unit_index * input_group_units_length
                     x_end_range = x_start_range + input_group_units_length
@@ -88,8 +88,8 @@ class Residue:
                 )
             
             # Get Y-data:
-            category = self.residue_and_structure[idx].category
-            self.Y_data[residue_counter] = np.where(ouput_units == category, 1, 0)
+            category = self.residue_and_structure[residue_counter].category
+            self.Y_data[residue_counter] = self.get_onehot_encoded_label(target_units=ouput_units, label=category)
 
             residue_counter += 1
 
@@ -101,9 +101,8 @@ class Residue:
         """Returns numerical value for category as defined in target.csv."""
         return self.targets[self.residue_and_structure[index].category]
 
-    @staticmethod
-    def is_division_by_zero(numerator) -> bool:
-        return numerator == 0
+    def get_onehot_encoded_label(self, target_units: np.ndarray, label: str) -> np.ndarray:
+        return np.where(target_units == label, 1, 0)
 
 
 class ResidueFactory:
