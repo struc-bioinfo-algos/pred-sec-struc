@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import unittest
+import numpy as np
 from src.training import Training
 
 
@@ -16,8 +17,14 @@ class TestTraining(unittest.TestCase):
         self.assertEqual(len(self.training.pdb_lst), 105)
 
     def test_preprocess(self):
-        self.assertEqual(self.training.X_data.size, 2320101)
-        self.assertEqual(self.training.Y_data.size, 47349)
+        self.assertEqual(self.training.X_data.size, 4192461)
+        self.assertEqual(self.training.Y_data.size, 46071)
+
+    def test_decode_onehot(self):
+        classifications = np.array([[0, 0, 1], [1, 0, 0], [0, 1, 0], [0, 1, 0], [0, 0, 1]])
+        observed, _ = self.training.decode_onehot(classifications=classifications)
+        expected = ['c', 'a', 'b', 'b', 'c']
+        self.assertEqual(expected, observed)
 
     @unittest.skip
     def test_train(self):
