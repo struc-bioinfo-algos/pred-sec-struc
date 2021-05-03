@@ -80,7 +80,7 @@ class Residue:
                     first_iteration = False
             else:
                 current_aa = self.residue_and_structure[idx].amino_acid
-                current_units = np.where(input_group_units == current_aa, 1, 0)
+                current_units = self.get_onehot_encoded_label(target_units=input_group_units, label=current_aa)
 
                 self.X_data[residue_counter] = np.append(
                     self.X_data[residue_counter-1][input_group_units_length:],
@@ -141,6 +141,11 @@ class Target:
     sec_structure: dict = {}
     mapping: dict = {}
     encoding: preprocessing.LabelEncoder
+    ohe2label: dict = {
+        (1, 0, 0): 'a',
+        (0, 1, 0): 'b',
+        (0, 0, 1): 'c'
+    }
 
     @classmethod
     def get_table(cls) -> None:
@@ -152,3 +157,4 @@ class Target:
                 cls.mapping[row['Abbreviation']] = int(row['Encoding'])
         cls.encoding = preprocessing.LabelEncoder()
         cls.encoding.fit(list(cls.mapping.keys()))
+
