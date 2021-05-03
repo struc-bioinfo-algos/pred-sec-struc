@@ -1,0 +1,22 @@
+Amino Acid,Single-letter-abbreviation,Encoding
+gap,-,0
+Alanine,A,1
+Cysteine,C,2
+Aspartic acid,D,3
+Glutamic acid,E,4
+Phenylalanine,F,5
+Glycine,G,6
+Histidine,H,7
+Isoleucine,I,8
+Lysine,K,9
+Leucine,L,10
+Methionine,M,11
+Asparagine,N,12
+Proline,P,13
+Glutamine,Q,14
+Arginine,R,15
+Serine,S,16
+Threonine,T,17
+Valine,V,18
+Tryptophan,W,19
+Tyrosine,Y,20
