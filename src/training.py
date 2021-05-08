@@ -2,6 +2,7 @@
 
 import numpy as np
 import logging
+import matplotlib.pyplot as plt
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
@@ -22,8 +23,12 @@ class Training:
         self.pdb_lst: list = []
         self.classifier = None
         self.model = None
-        self.n_hidden_units = 5
-        self.n_hidden_layers = 3
+        self.n_units_layer1 = 273
+        self.n_units_layer2 = 136
+        self.n_units_layer3 = 68
+        self.n_units_layer4 = 34
+        self.n_units_layer5 = 17
+        self.n_units_layer6 = 8
         self.split_test_frac = 0.25  # fraction of data to be used for testing
         self.X_train: np.ndarray = None
         self.X_test: np.ndarray = None
@@ -47,15 +52,19 @@ class Training:
                 self.Y_data = np.concatenate((self.Y_data, obj.Y_data))
 
     def train(self):
-        logger.info(f'Training multi-layer perceptron with {self.n_hidden_layers}')
+        hidden_layer_sizes = (self.n_units_layer1, self.n_units_layer2, self.n_units_layer3, self.n_units_layer4,
+                                self.n_units_layer5, self.n_units_layer6)
+        logger.info(f'Training multi-layer perceptron with {len(hidden_layer_sizes)} layers.')
         self.classifier = MLPClassifier(
-            solver='lbfgs',
+            solver='adam',
             alpha=1e-5,
-            hidden_layer_sizes=(self.n_hidden_units, self.n_hidden_layers),
-            max_iter=2000,
+            hidden_layer_sizes=hidden_layer_sizes,
+            max_iter=150,
             activation='relu',
             random_state=1,
-            warm_start=True
+            warm_start=True,
+            learning_rate='adaptive',
+            verbose=True
         )
         self.get_split_data()
         self.model = self.classifier.fit(self.X_train, self.Y_train)
@@ -77,6 +86,14 @@ class Training:
         print('Coil:')
         self.print_cm(confusion_matrix[:][2], labels=['Y', 'N'])
 
+    def plot(self):
+        y = self.classifier.loss_curve_
+        x = [i for i in range(0, len(y))]
+        plt.plot(x, y)
+        plt.ylim(0, 2)
+        plt.xlabel("Number of iterations")
+        plt.ylabel("Loss")
+        plt.show()
 
     def get_pdb_lst(self):
         filepath = Settings.q_s_tab1
