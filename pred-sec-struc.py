@@ -27,6 +27,7 @@ def main():
         model.preprocess()
         model.train()
         model.validate_model()
+        model.plot()
 
         # Persist model.
         model_dir = Settings.model_path
