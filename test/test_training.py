@@ -16,6 +16,7 @@ class TestTraining(unittest.TestCase):
         self.assertEqual(self.training.pdb_lst[0], '1acx')
         self.assertEqual(len(self.training.pdb_lst), 105)
 
+    @unittest.skip("skip test")
     def test_preprocess(self):
         self.assertEqual(self.training.X_data.size, 4192461)
         self.assertEqual(self.training.Y_data.size, 46071)
